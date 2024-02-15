@@ -9,11 +9,9 @@ import ornaments.classes.OrnamentColor;
 import javax.swing.filechooser.FileSystemView;
 import java.awt.*;
 import java.io.File;
-import java.nio.file.Path;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import java.nio.file.Files;
 
 @ComponentScan(basePackages = "ornaments")
 @Configuration
@@ -37,6 +35,8 @@ public class ApplicationConfig {
             FileSystemView view = FileSystemView.getFileSystemView();
             File file = view.getHomeDirectory();
             ornamentSavePath = file.getPath() + "/Desktop/ornaments/";
+        } else if (!ornamentSavePath.endsWith("/")) {
+            ornamentSavePath += "/";
         }
         return ornamentSavePath;
     }

@@ -12,7 +12,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class OrnamentDrawer extends JPanel {
+public class OrnamentDrawerPanel extends JPanel {
     private final List<OrnamentColor> colors;
     private final int rectHeight;
     private final int rectWidth;
@@ -20,8 +20,8 @@ public class OrnamentDrawer extends JPanel {
     private ColorChoiceMatrix colorChoiceMatrix;
     private List<ColorStatistics> colorStats;
 
-    public OrnamentDrawer(List<OrnamentColor> colors, int rectWidth,
-                          int repeats) {
+    public OrnamentDrawerPanel(List<OrnamentColor> colors, int rectWidth,
+                               int repeats) {
         if (repeats < 3) {
             throw new IllegalStateException("repeats must be more or equal " +
                     "than 3");

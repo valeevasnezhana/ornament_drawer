@@ -4,7 +4,7 @@ package ornaments.app;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import ornaments.classes.OrnamentColor;
-import ornaments.classes.OrnamentDrawer;
+import ornaments.classes.OrnamentDrawerPanel;
 import ornaments.config.ApplicationConfig;
 
 import javax.swing.*;
@@ -31,15 +31,17 @@ public class Main {
         } catch (FileAlreadyExistsException ignored) {
 
         } catch (IOException e) {
+            System.err.println("SAVE IS NOT ENABLED");
+            e.printStackTrace();
             saveEnabled = false;
         }
 
 
         JFrame ornamentFrame = createMainFrame();
-        OrnamentDrawer ornamentDrawer = createOrnamentDrawer();
-        JPanel buttonPanel = createButtonPanel(ornamentDrawer);
+        OrnamentDrawerPanel ornamentDrawerPanel = createOrnamentDrawer();
+        JPanel buttonPanel = createButtonPanel(ornamentDrawerPanel);
 
-        ornamentFrame.add(ornamentDrawer, BorderLayout.WEST);
+        ornamentFrame.add(ornamentDrawerPanel, BorderLayout.WEST);
         ornamentFrame.add(buttonPanel, BorderLayout.EAST);
 
         ornamentFrame.pack();
@@ -54,29 +56,30 @@ public class Main {
         return frame;
     }
 
-    private static OrnamentDrawer createOrnamentDrawer() {
+    private static OrnamentDrawerPanel createOrnamentDrawer() {
         List<OrnamentColor> colors = getOrnamentColors();
         int rectWidth = config.getRectWidth();
         int repeats = config.getRepeats();
-        return new OrnamentDrawer(colors, rectWidth, repeats);
+        return new OrnamentDrawerPanel(colors, rectWidth, repeats);
     }
 
     private static List<OrnamentColor> getOrnamentColors() {
         return config.getOrnamentColors();
     }
 
-    private static JPanel createButtonPanel(OrnamentDrawer ornamentDrawer) {
+    private static JPanel createButtonPanel(
+            OrnamentDrawerPanel ornamentDrawerPanel) {
         JPanel panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 
         if (saveEnabled) {
             JButton buttonSave = createButton("Save",
-                    e -> ornamentDrawer.saveOrnament(
+                    e -> ornamentDrawerPanel.saveOrnament(
                             config.getOrnamentSavePath()));
             panel.add(buttonSave);
         }
         JButton buttonRegenerate = createButton("Regenerate",
-                e -> ornamentDrawer.drawNewOrnament());
+                e -> ornamentDrawerPanel.drawNewOrnament());
 
         panel.add(Box.createVerticalStrut(10));
         panel.add(buttonRegenerate);
