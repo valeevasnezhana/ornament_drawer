@@ -2,6 +2,7 @@ package ornaments.classes;
 
 
 import java.util.*;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class ColorChoiceMatrix {
     private final int repeats;
@@ -25,17 +26,19 @@ public class ColorChoiceMatrix {
             numbers.add(i);
         }
 
-        Random random = new Random();
+        Random random = ThreadLocalRandom.current();
         for (int i = 0; i < repeats - 1; i++) {
             for (int j = 0; j < repeats; j++) {
                 int randomIndex = random.nextInt(numbers.size());
                 int randomNumber = numbers.get(randomIndex);
 
-                while ((i > 0 && entry[i - 1][j] == randomNumber) ||
-                        (j > 0 && entry[i][j - 1] == randomNumber)) {
-                    randomIndex = random.nextInt(numbers.size());
-                    randomNumber = numbers.get(randomIndex);
-                }
+//                while ((i > 0 && entry[i - 1][j] == randomNumber) ||
+//                        (j > 0 && entry[i][j - 1] == randomNumber)) {
+//                    randomIndex = random.nextInt(numbers.size());
+//                    randomNumber = numbers.get(randomIndex);
+//                }
+                randomIndex = random.nextInt(numbers.size());
+                randomNumber = numbers.get(randomIndex);
 
                 entry[i][j] = randomNumber;
             }
@@ -94,12 +97,13 @@ public class ColorChoiceMatrix {
     }
 
     public boolean checkManyColorsRepeats() {
-        if (repeats > 8 || colors.size() < 5) {
-            return false;
-        }
-        return checkVerticalOnHorizontalPairsManyRepeats() ||
-                checkOneVerticalPairsManyRepeats() ||
-                checkHorizontalPairsManyRepeats();
+//        if (repeats > 8 || colors.size() < 5) {
+//            return false;
+//        }
+//        return checkVerticalOnHorizontalPairsManyRepeats() ||
+//                checkOneVerticalPairsManyRepeats() ||
+//                checkHorizontalPairsManyRepeats();
+        return false;
     }
 
     public void refill() {
