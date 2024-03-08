@@ -11,7 +11,7 @@ public class ColorStatistics {
     private int halfRightBottom;
 
 
-    public ColorStatistics( OrnamentColor color) {
+    public ColorStatistics(OrnamentColor color) {
         this.color = color;
         clearStats();
     }
@@ -54,7 +54,7 @@ public class ColorStatistics {
     }
 
     public String toString() {
-        return color.getName() + ": " +
+        return color.name() + ": " +
                 "\n\tfullLeft=" + fullLeft +
                 ", fullRight=" + fullRight +
                 ", halfLeftUp=" + halfLeftUp +

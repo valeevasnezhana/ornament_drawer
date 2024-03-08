@@ -106,7 +106,7 @@ public class OrnamentDrawerPanel extends JPanel {
                         y - rectWidth};
                 int[] xPoints = {x, x, x - rectWidth, x - rectWidth};
                 Polygon polygon = new Polygon(xPoints, yPoints, 4);
-                g2d.setColor(color.getColor());
+                g2d.setColor(color.color());
                 g2d.fill(polygon);
 
                 y += rectHeight;
@@ -128,7 +128,7 @@ public class OrnamentDrawerPanel extends JPanel {
                         y + rectWidth};
                 int[] xPoints = {x, x, x - rectWidth, x - rectWidth};
                 Polygon polygon = new Polygon(xPoints, yPoints, 4);
-                g2d.setColor(color.getColor());
+                g2d.setColor(color.color());
                 g2d.fill(polygon);
 
                 y += rectHeight;
