@@ -4,6 +4,14 @@ package ornaments.classes;
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 
+/**
+ * This class represents a matrix of ornament colors, where each element
+ * represents a
+ * color choice
+ * for a particular element. This class also
+ * includes methods to randomize the color choices
+ * for each element and ensures that ornament seems really "random"
+ */
 public class ColorChoiceMatrix {
     private final int repeats;
     private final List<OrnamentColor> colors;
@@ -20,6 +28,10 @@ public class ColorChoiceMatrix {
         refill();
     }
 
+    /**
+     * This method randomizes the values in the 'entry' 2D array by shuffling the numbers and populating the array.
+     * It ensures that no two adjacent elements in the array have the same value.
+     */
     public void randomize() {
         List<Integer> numbers = new ArrayList<>();
         for (int i = 0; i < colors.size(); i++) {
@@ -44,6 +56,12 @@ public class ColorChoiceMatrix {
         }
     }
 
+
+    /**
+     * @return true if matrix contains pair repeats like this:
+     * COLOR1 ... COLOR1
+     * COLOR2 ... COLOR2
+     */
     public boolean checkVerticalOnHorizontalPairsManyRepeats() {
         for (int row = 1; row < entry.length; row++) {
             List<int[]> levelPairs = new ArrayList<>();
@@ -57,6 +75,22 @@ public class ColorChoiceMatrix {
         return false;
     }
 
+
+    /**
+     * @return true if matrix contains pair repeats like this:
+     * COLOR1
+     * COLOR2
+     * COLOR1
+     * COLOR2
+     * OR
+     * COLOR1
+     * COLOR2
+     * colorX
+     * colorY
+     * COLOR1
+     * COLOR2
+     * etc.
+     */
     public boolean checkOneVerticalPairsManyRepeats() {
         int colIndex = 0;
 
@@ -82,6 +116,13 @@ public class ColorChoiceMatrix {
         return false;
     }
 
+
+    /**
+     * @return true if matrix contains pair repeats like this:
+     * COLOR1 COLOR2 COLOR1 COLOR2
+     * OR COLOR1 COLOR2 colorX colorY COLOR1 COLOR2 etc.
+     */
+
     public boolean checkHorizontalPairsManyRepeats() {
         for (int[] ints : entry) {
             List<int[]> levelPairs = new ArrayList<>();
@@ -95,6 +136,15 @@ public class ColorChoiceMatrix {
         return false;
     }
 
+    /**
+     * Checks if there are any repeated colors in the color matrix, with
+     * specific conditions
+     *
+     * @return true if there are repeated colors according to conditions, false otherwise
+     * @see ColorChoiceMatrix#checkHorizontalPairsManyRepeats()
+     * @see ColorChoiceMatrix#checkOneVerticalPairsManyRepeats()
+     * @see ColorChoiceMatrix#checkVerticalOnHorizontalPairsManyRepeats()
+     */
     public boolean checkManyColorsRepeats() {
         if (repeats > 8 || colors.size() < 5) {
             return false;
@@ -104,6 +154,11 @@ public class ColorChoiceMatrix {
                 checkHorizontalPairsManyRepeats();
     }
 
+
+    /**
+     * Refills the color matrix until there are no repeated colors according to
+     * specific conditions.
+     */
     public void refill() {
         randomize();
         boolean manyColorRepeats = checkManyColorsRepeats();
@@ -113,13 +168,19 @@ public class ColorChoiceMatrix {
         }
     }
 
+    /**
+     * Checks if there are any equal pairs in the given list of integer arrays.
+     *
+     * @param pairs the list of integer arrays containing pairs
+     * @return true if there are equal pairs, false otherwise
+     */
+
     private boolean checkEqualPairs(List<int[]> pairs) {
-        for (int i = 0; i < pairs.size() - 1; i++) {
-            for (int j = i + 1; j < pairs.size(); j++) {
-                if (pairs.get(i)[0] == pairs.get(j)[0] &&
-                        pairs.get(i)[1] == pairs.get(j)[1]) {
-                    return true;
-                }
+        Set<String> pairSet = new HashSet<>();
+        for (int[] pair : pairs) {
+            String pairString = pair[0] + "," + pair[1];
+            if (!pairSet.add(pairString)) {
+                return true;
             }
         }
         return false;
@@ -129,9 +190,19 @@ public class ColorChoiceMatrix {
         return entry;
     }
 
+    /**
+     * @return String identifier based on the number of repeats and values of colors
+     * If the size of colors list is less than or equal to 5 and the number of repeats is less than or equal to 10,
+     * then the identifier is calculated using the pairs stored in the 'entry' array and the size of colors list.
+     * Otherwise, a random UUID is used as the tail of identifier
+     */
     public String calculateIdentifier() {
         StringJoiner joiner = new StringJoiner("");
-        joiner.add("" + repeats + colors.size());
+        joiner.add("" + repeats);
+        for (OrnamentColor ornamentColor: colors) {
+            joiner.add(Integer.toHexString(ornamentColor.color().getRGB()));
+        }
+        joiner.add("_");
         if (colors.size() <= 5 && repeats <= 10) {
             for (int[] ints : entry) {
                 for (int j = 1; j < ints.length; j += 2) {
